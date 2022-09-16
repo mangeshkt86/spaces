@@ -1,2 +1,2 @@
-# spaces
-Repo for space allocation tool development
+# Spaces
+Spaces is a space allocation tool. More details to follow...
