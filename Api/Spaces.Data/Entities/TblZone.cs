@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Spaces.Api
+namespace Spaces.Data.Entities
 {
     public partial class TblZone
     {
