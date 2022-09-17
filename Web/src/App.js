@@ -7,7 +7,7 @@ export default function App() {
 
   const RequireAuth = ({ children }) => {
     let signedIn = sessionStorage.getItem('loggedInUser');
-    if (!signedIn) {
+    if (!signedIn || signedIn == '') {
       return <Navigate to="/login" />;
     }
   
