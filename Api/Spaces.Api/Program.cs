@@ -57,5 +57,8 @@ static IEdmModel GetEdmModel()
     builder.EntitySet<TblFloor>("Floor");
     builder.EntitySet<TblZone>("Zone");
     builder.EntitySet<TblDesk>("Desk");
+    builder.EntitySet<TblDepartment>("Departments");
+    builder.EntitySet<TblAllocation>("Allocation");
+    builder.EntitySet<TblBooking>("Booking");
     return builder.GetEdmModel();
 }

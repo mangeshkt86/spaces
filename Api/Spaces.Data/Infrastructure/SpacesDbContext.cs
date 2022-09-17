@@ -17,6 +17,9 @@ namespace Spaces.Data
         {
         }
 
+        public virtual DbSet<TblAllocation> TblAllocations { get; set; } = null!;
+        public virtual DbSet<TblBooking> TblBookings { get; set; } = null!;
+        public virtual DbSet<TblDepartment> TblDepartments { get; set; } = null!;
         public virtual DbSet<TblDesk> TblDesks { get; set; } = null!;
         public virtual DbSet<TblFloor> TblFloors { get; set; } = null!;
         public virtual DbSet<TblLocation> TblLocations { get; set; } = null!;
@@ -27,12 +30,37 @@ namespace Spaces.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlite("Data Source=C:\\Users\\899807\\learning\\SpaceAllocationTool\\Database\\space_allocation.db;");
+                optionsBuilder.UseSqlite("Data Source=D:\\CS_Hackathon\\Project\\spaces\\Database\\space_allocation.db;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TblAllocation>(entity =>
+            {
+                entity.ToTable("tbl_allocation");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Oecode).HasColumnName("OECode");
+            });
+
+            modelBuilder.Entity<TblBooking>(entity =>
+            {
+                entity.ToTable("tbl_booking");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<TblDepartment>(entity =>
+            {
+                entity.ToTable("tbl_department");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Oecode).HasColumnName("OECode");
+            });
+
             modelBuilder.Entity<TblDesk>(entity =>
             {
                 entity.ToTable("tbl_desk");
