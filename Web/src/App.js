@@ -1,34 +1,31 @@
 import * as React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import Home from './home';
 import Login from './login';
-
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center">
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+import { BrowserRouter as Router, Navigate , Route, Routes } from "react-router-dom";
 
 export default function App() {
+
+  const RequireAuth = ({ children }) => {
+    let signedIn = sessionStorage.getItem('loggedInUser');
+    if (!signedIn) {
+      return <Navigate to="/login" />;
+    }
+  
+    return children;
+  };
+
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Spaces - Allocate your space
-        </Typography>
-        <Login />
-        {/* <ProTip />
-        <Copyright /> */}
-      </Box>
-    </Container>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+          } 
+        />
+    </Routes>
+    </Router>
   );
 }
