@@ -38,11 +38,21 @@ namespace Spaces.Data
                 entity.ToTable("tbl_desk");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Zone)
+                    .WithMany(p => p.TblDesks)
+                    .HasForeignKey(d => d.ZoneId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<TblFloor>(entity =>
             {
                 entity.ToTable("tbl_floor");
+
+                entity.HasOne(d => d.Location)
+                    .WithMany(p => p.TblFloors)
+                    .HasForeignKey(d => d.LocationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<TblLocation>(entity =>
@@ -57,6 +67,11 @@ namespace Spaces.Data
                 entity.ToTable("tbl_zone");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Floor)
+                    .WithMany(p => p.TblZones)
+                    .HasForeignKey(d => d.FloorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             OnModelCreatingPartial(modelBuilder);
