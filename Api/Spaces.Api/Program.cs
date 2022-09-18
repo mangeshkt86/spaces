@@ -27,9 +27,11 @@ builder.Services.AddDbContext<SpacesDbContext>(
 
 builder.Services
     .AddControllers()
-    .AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand())
-    .AddJsonOptions(x=> {
-        x.JsonSerializerOptions.ReferenceHandler =ReferenceHandler.IgnoreCycles;
+    //.AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand())
+    .AddOData()
+    .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         x.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
