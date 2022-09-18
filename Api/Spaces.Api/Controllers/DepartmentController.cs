@@ -22,7 +22,7 @@ public class DepartmentController : ODataController
         _context = context;
     }
 
-    [HttpGet]
+    [HttpGet("get-all-departments")]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblDepartment> Get([FromServices] SpacesDbContext context)
     {
@@ -30,8 +30,8 @@ public class DepartmentController : ODataController
     }
 
     // GET: api/Desk/5
-    #region snippet_GetByID
-    [HttpGet]
+    #region Department Public Methods
+    [HttpGet("get-department-by-id/{key}")]
     [EnableQuery]
     public async Task<ActionResult<TblDepartment>> GetTblDepartment(long key)
     {
@@ -45,5 +45,4 @@ public class DepartmentController : ODataController
         return location;
     }
     #endregion
-    
 }

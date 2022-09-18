@@ -21,8 +21,8 @@ public class FloorController : ODataController
         _logger = logger;
         _context = context;
     }
-
-    [HttpGet]
+    #region Floors public methods
+    [HttpGet("get-all-floors")]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblFloor> Get([FromServices] SpacesDbContext context)
     {
@@ -30,20 +30,28 @@ public class FloorController : ODataController
     }
 
     // GET: api/Floor/5
-    #region snippet_GetByID
-    [HttpGet]
-    [EnableQuery]
-    public async Task<ActionResult<TblFloor>> GetTblFloor(long key)
-    {
-        var location = await _context.TblFloors.FindAsync(key);
 
-        if (location == null)
+    [HttpGet("get-floor-by-Id/{id}")]
+    [EnableQuery]
+    public async Task<ActionResult<TblFloor>> GetFloorById(long id)
+    {
+        var floor = await _context.TblFloors.FindAsync(id);
+
+        if (floor == null)
         {
             return NotFound();
         }
 
-        return location;
+        return floor;
     }
+
+    [HttpGet("get-floors-by-location/{id}")]
+    [EnableQuery]
+    public IQueryable<TblFloor> GetFloorsByLocationId(long id)
+    {
+        return _context.TblFloors.Where(flr => flr.LocationId == id);
+    }
+
     #endregion
-    
+
 }

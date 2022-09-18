@@ -22,6 +22,7 @@ public class ZoneController : ODataController
         _context = context;
     }
 
+    [HttpGet("get-all-zones")]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblZone> Get([FromServices] SpacesDbContext context)
     {
@@ -29,11 +30,12 @@ public class ZoneController : ODataController
     }
 
     // GET: api/zone/5
-    #region snippet_GetByID
+    #region Zone Methods
+    [HttpGet("get-zone-by-id/{id}")]
     [EnableQuery]
-    public async Task<ActionResult<TblZone>> GetTblZone(long key)
+    public async Task<ActionResult<TblZone>> GetZoneById(long id)
     {
-        var location = await _context.TblZones.FindAsync(key);
+        var location = await _context.TblZones.FindAsync(id);
 
         if (location == null)
         {
@@ -42,6 +44,15 @@ public class ZoneController : ODataController
 
         return location;
     }
+
+    [HttpGet("get-zones-by-floor/{id}")]
+    [EnableQuery]
+    public IQueryable<TblZone> GetZonesByFloorId(long id)
+    {
+        return _context.TblZones.Where(zone => zone.FloorId == id);
+    }
+
+
     #endregion
-    
+
 }
