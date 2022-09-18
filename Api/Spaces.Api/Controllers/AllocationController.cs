@@ -12,9 +12,7 @@ using System.Net;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AllocationController : ControllerBase
+public class AllocationController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<AllocationController> _logger;
@@ -35,10 +33,11 @@ public class AllocationController : ControllerBase
 
     // GET: api/Desk/5
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblAllocation>> GetTblAllocation(long id)
+    [HttpGet]
+    [EnableQuery]
+    public async Task<ActionResult<TblAllocation>> GetById(long key)
     {
-        var location = await _context.TblAllocations.FindAsync(id);
+        var location = await _context.TblAllocations.FindAsync(key);
 
         if (location == null)
         {

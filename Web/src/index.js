@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import App from "./App";
 import theme from "./theme";
+import { SnackbarProvider, VariantType, useSnackbar } from "notistack";
 import UserContextProvider from "./contexts/userContext";
 import {
   BrowserRouter as Router,
@@ -11,7 +12,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import AllocationContextProvider from "./contexts/userContext/allocationContext";
+import AllocationContextProvider from "./contexts/allocationContext";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
@@ -22,9 +23,11 @@ root.render(
     <CssBaseline />
     <UserContextProvider>
       <AllocationContextProvider>
-        <Router>
-          <App />
-        </Router>
+        <SnackbarProvider maxSnack={2}>
+          <Router>
+            <App />
+          </Router>
+        </SnackbarProvider>
       </AllocationContextProvider>
     </UserContextProvider>
   </ThemeProvider>

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Spaces.Api.Controllers;
 
-public class DeskController : ControllerBase
+public class DeskController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<DeskController> _logger;
@@ -31,10 +31,11 @@ public class DeskController : ControllerBase
 
     // GET: api/Desk/5
     #region snippet_GetByID
-    [HttpGet("{id}")]
-    public TblDesk GetTblDesk(long id)
+    [HttpGet]
+    [EnableQuery]
+    public TblDesk GetTblDesk(long key)
     {
-        var desk = _context.TblDesks.Find(id);
+        var desk = _context.TblDesks.Find(key);
 
         return desk;
     }

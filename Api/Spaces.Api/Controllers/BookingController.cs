@@ -12,9 +12,7 @@ using System.Net;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class BookingController : ControllerBase
+public class BookingController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<BookingController> _logger;
@@ -35,10 +33,11 @@ public class BookingController : ControllerBase
 
     // GET: api/Desk/5
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblBooking>> GetTblBooking(long id)
+    [HttpGet]
+    [EnableQuery]
+    public async Task<ActionResult<TblBooking>> GetTblBooking(long key)
     {
-        var location = await _context.TblBookings.FindAsync(id);
+        var location = await _context.TblBookings.FindAsync(key);
 
         if (location == null)
         {

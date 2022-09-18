@@ -22,13 +22,19 @@ export default function UserContextProvider({ children }) {
       setUser(x);
     });
   }
+
+  function logout() {
+    return setUser(null);
+  }
+
   return (
     <UserContext.Provider
       value={{
-        ...user,
-        ...role,
+        user,
+        role,
         roles,
         login,
+        logout,
         changeRole,
       }}
     >
