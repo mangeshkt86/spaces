@@ -11,9 +11,7 @@ using System.Linq;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class DepartmentController : ControllerBase
+public class DepartmentController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<DepartmentController> _logger;
@@ -33,10 +31,11 @@ public class DepartmentController : ControllerBase
 
     // GET: api/Desk/5
     #region snippet_GetByID
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblDepartment>> GetTblDepartment(long id)
+    [HttpGet]
+    [EnableQuery]
+    public async Task<ActionResult<TblDepartment>> GetTblDepartment(long key)
     {
-        var location = await _context.TblDepartments.FindAsync(id);
+        var location = await _context.TblDepartments.FindAsync(key);
 
         if (location == null)
         {

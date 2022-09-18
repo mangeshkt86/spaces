@@ -11,9 +11,7 @@ using System.Linq;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class FloorController : ControllerBase
+public class FloorController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<FloorController> _logger;
@@ -33,10 +31,11 @@ public class FloorController : ControllerBase
 
     // GET: api/Floor/5
     #region snippet_GetByID
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblFloor>> GetTblFloor(long id)
+    [HttpGet]
+    [EnableQuery]
+    public async Task<ActionResult<TblFloor>> GetTblFloor(long key)
     {
-        var location = await _context.TblFloors.FindAsync(id);
+        var location = await _context.TblFloors.FindAsync(key);
 
         if (location == null)
         {
