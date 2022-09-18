@@ -22,8 +22,8 @@ public class ZoneController : ODataController
         _context = context;
     }
 
+    [EnableQuery]
     [HttpGet("get-all-zones")]
-    [EnableQuery(PageSize = 50)]
     public IQueryable<TblZone> Get([FromServices] SpacesDbContext context)
     {
         return context.TblZones;

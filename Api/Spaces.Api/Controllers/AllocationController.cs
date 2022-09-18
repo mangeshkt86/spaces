@@ -24,8 +24,8 @@ public class AllocationController : ODataController
     }
 
     #region Allocation CRUD Methods
+    [EnableQuery]
     [HttpGet("get-all-allocations")]
-    [EnableQuery(PageSize = 50)]
     public IQueryable<TblAllocation> Get([FromServices] SpacesDbContext context)
     {
         return context.TblAllocations;
@@ -102,6 +102,29 @@ public class AllocationController : ODataController
         _context.TblAllocations.Remove(allocation);
         await _context.SaveChangesAsync();
         return StatusCode((int)HttpStatusCode.NoContent);
+    }
+
+    [HttpGet("get-allocation-summary/{empOECode}")]
+    public IActionResult GetAllocationSummary(string empOECode)
+    {
+        var allocationSummary = (from a in _context.TblAllocations
+                                 join d in _context.TblDesks on a.DeskNumber equals d.Id
+                                 join z in _context.TblZones on d.ZoneId equals z.Id
+                                 join f in _context.TblFloors on z.FloorId equals f.Id
+                                 join l in _context.TblLocations on f.LocationId equals l.Id
+                                 where a.Oecode == empOECode
+                                 select new
+                                 {
+                                     Location = l.Name,
+                                     Floor = f.Name,
+                                     Zone = z.Name,
+                                     OECode = a.Oecode,
+                                     DeskNumber = d.DeskNumber,
+                                     StartDate = a.StartDate,
+                                     EndDate = a.EndDate
+                                 }).ToList();
+
+        return Ok(allocationSummary);
     }
 
 

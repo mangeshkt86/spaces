@@ -21,12 +21,13 @@ public class FloorController : ODataController
         _logger = logger;
         _context = context;
     }
+
     #region Floors public methods
-    [HttpGet("get-all-floors")]
-    [EnableQuery(PageSize = 50)]
+
+    [HttpGet]
+    [EnableQuery]
     public IQueryable<TblFloor> Get([FromServices] SpacesDbContext context)
     {
-        return context.TblFloors;
     }
 
     // GET: api/Floor/5
