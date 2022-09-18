@@ -22,8 +22,8 @@ public class DepartmentController : ODataController
         _context = context;
     }
 
+    [EnableQuery]
     [HttpGet("get-all-departments")]
-    [EnableQuery(PageSize = 50)]
     public IQueryable<TblDepartment> Get([FromServices] SpacesDbContext context)
     {
         return context.TblDepartments;

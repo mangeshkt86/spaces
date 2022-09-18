@@ -24,8 +24,8 @@ public class BookingController : ODataController
     }
 
     #region Booking CRUD Methods
+    [EnableQuery]
     [HttpGet("get-all-bookings")]
-    [EnableQuery(PageSize = 50)]
     public IQueryable<TblBooking> Get([FromServices] SpacesDbContext context)
     {
         return context.TblBookings;

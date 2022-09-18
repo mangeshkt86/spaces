@@ -24,8 +24,8 @@ public class AllocationController : ODataController
     }
 
     #region Allocation CRUD Methods
+    [EnableQuery]
     [HttpGet("get-all-allocations")]
-    [EnableQuery(PageSize = 50)]
     public IQueryable<TblAllocation> Get([FromServices] SpacesDbContext context)
     {
         return context.TblAllocations;

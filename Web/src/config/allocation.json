@@ -1,0 +1,19 @@
+{
+    "oeCode": "",
+    "allocation": [
+        {
+            "Id": 1,
+            "Name": "EON 1",
+            "Status": "Y",
+            "TblFloors": [
+                {
+                    "TblZones": [
+                        {
+                            "TblDesks": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

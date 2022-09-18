@@ -2,64 +2,56 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../userContext";
 import { getLocations } from "../../apis/locationApi";
-import { getFloors, getZones } from "../../apis/floorApi";
+import { getFloor, getFloors, getZones } from "../../apis/floorApi";
 import { getRoles, getUser } from "../../apis/userApi";
 import { getAllAllocations } from "../../apis/allocationApi";
 import { useSnackbar } from "notistack";
+import draftAllocation from "../../config/allocation.json";
 
 const AllocationContext = React.createContext({});
 
 export default function AllocationContextProvider({ children }) {
-  // const { enqueueSnackbar } = useSnackbar();
-  const user = useContext(UserContext);
+  const [allocations, setAllocations] = useState([]);
 
-  const [locations, setLocations] = useState([]);
-  const [floors, setFloors] = useState([]);
-  const [allocation, setAllocation] = useState([]);
-  const [location, setLocation] = useState(0);
-  const [floor, setFloor] = useState(0);
-  const [oeCode, setOeCode] = useState();
+  const [allocationData, setAllocationData] = useState({
+    oeCode: "",
+    startDate: new Date(),
+    endDate: new Date(),
+    allocationDate: new Date(),
+    allocationId: 0,
+  });
 
   useEffect(() => {
-    getLocations().then((x) => {
-      setLocations(x);
-    });
-
-    getAllAllocations().then((x) => {
-      setAllocation(x);
-      console.log(allocation);
-    });
-  }, []);
-
-  const changeLocation = (id) => {
-    var selected = { ...locations.find((x) => x.Id == id) };
-    setLocation(selected);
-    // enqueueSnackbar(`Location changed to ${selected.Name} `, "info");
-    getFloors(selected).then((x) => {
-      setFloors(x);
-    });
+    console.log(allocations);
+  }, [allocations])
+  
+  const changeOeCode = (code) => {
+    setAllocationData({ ...allocationData, oeCode: code });
   };
 
-  const changeFloor = (floorId) => {
-    var selected = floors.filter((x) => x.Id == floorId);
-    setFloor(selected);
+  const changeStartDate = (dt) => {
+    setAllocationData({ ...allocationData, startDate: dt });
+  };
 
-    getZones().then((x) => {
-      setZones(x);
-    });
+  const changeEndDate = (dt) => {
+    setAllocationData({ ...allocationData, endDate: dt });
+  };
+
+  const add = (desk) => {
+    setAllocations([...allocations.concat(desk)]);
+  };
+
+  const remove = (desks) => {
+    var existingAllocations = [...allocations].filter(x => !desks.find(d=> d.Id==x.Id));
+    setAllocations([...existingAllocations]);
   };
 
   return (
     <AllocationContext.Provider
       value={{
-        location,
-        locations,
-        allocation,
-        oeCode,
-        changeLocation,
-        floors,
-        floor,
-        changeFloor,
+        allocations,
+        add,
+        remove
       }}
     >
       {children}
