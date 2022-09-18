@@ -4,15 +4,17 @@ import { UserContext } from "../userContext";
 import { getLocations } from "../../apis/locationApi";
 import { getFloors, getZones } from "../../apis/floorApi";
 import { getRoles, getUser } from "../../apis/userApi";
+import { getAllAllocations } from "../../apis/allocationApi";
 import { useSnackbar } from "notistack";
 
 const AllocationContext = React.createContext({});
 
 export default function AllocationContextProvider({ children }) {
   // const { enqueueSnackbar } = useSnackbar();
+  const user = useContext(UserContext);
+
   const [locations, setLocations] = useState([]);
   const [floors, setFloors] = useState([]);
-  const user = useContext(UserContext);
   const [allocation, setAllocation] = useState([]);
   const [location, setLocation] = useState(0);
   const [floor, setFloor] = useState(0);
@@ -21,6 +23,11 @@ export default function AllocationContextProvider({ children }) {
   useEffect(() => {
     getLocations().then((x) => {
       setLocations(x);
+    });
+
+    getAllAllocations().then((x) => {
+      setAllocation(x);
+      console.log(allocation);
     });
   }, []);
 
