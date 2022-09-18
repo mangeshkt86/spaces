@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { withStyles } from '@mui/styles';
+import { withStyles, makeStyles, createStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -28,6 +28,23 @@ import Allocation from '../allocation';
 import Configuration from '../configuration';
 
 const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    toolbar: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(1),
+    },
+  }),
+);
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -106,7 +123,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const classes = useStyles();
   const navigate = useNavigate();
+
   const [open, setOpen] = React.useState(false);
   const [selectedMenu, setSelectedMenu] = useState('allocation');
 
@@ -193,16 +212,17 @@ export default function MiniDrawer() {
         </List>
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <main >
-          {
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
             {
-              'configuration': <Configuration />,
-              'booking': <Booking />,
-              'allocation': <Allocation />
-            }[selectedMenu]
-          }
-        </main>
+              {
+                'configuration': <Configuration />,
+                'booking': <Booking />,
+                'allocation': <Allocation />
+              }[selectedMenu]
+            }
+          </main>
       </Box>
     </Box>
   );
