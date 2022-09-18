@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from ".";
+import { UserContext } from "../userContext";
 import { getLocations } from "../../apis/locationApi";
 import { getRoles, getUser } from "../../apis/userApi";
 

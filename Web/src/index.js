@@ -11,7 +11,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import AllocationContextProvider from "./contexts/userContext/allocationContext";
+import AllocationContextProvider from "./contexts/allocationContext";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);

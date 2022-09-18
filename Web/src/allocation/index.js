@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {API} from '../vars';
-import { AllocationContext } from '../contexts/userContext/allocationContext';
+import { AllocationContext } from '../contexts/allocationContext';
 
 const useStyles = makeStyles((theme) => ({
     select:{
