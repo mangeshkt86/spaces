@@ -2,57 +2,50 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../userContext";
 import { getLocations } from "../../apis/locationApi";
-import { getFloors, getZones } from "../../apis/floorApi";
+import { getFloor, getFloors, getZones } from "../../apis/floorApi";
 import { getRoles, getUser } from "../../apis/userApi";
 import { useSnackbar } from "notistack";
+import draftAllocation from "../../config/allocation.json";
 
 const AllocationContext = React.createContext({});
 
 export default function AllocationContextProvider({ children }) {
-  // const { enqueueSnackbar } = useSnackbar();
-  const [locations, setLocations] = useState([]);
-  const [floors, setFloors] = useState([]);
-  const user = useContext(UserContext);
-  const [allocation, setAllocation] = useState([]);
-  const [location, setLocation] = useState(0);
-  const [floor, setFloor] = useState(0);
-  const [oeCode, setOeCode] = useState();
+  const [allocations, setAllocations] = useState([]);
+  const [allocationData, setAllocationData] = useState({
+    oeCode: "",
+    startDate: new Date(),
+    endDate: new Date(),
+    allocationDate: new Date(),
+    allocationId: 0,
+  });
 
-  useEffect(() => {
-    getLocations().then((x) => {
-      setLocations(x);
-    });
-  }, []);
-
-  const changeLocation = (id) => {
-    var selected = { ...locations.find((x) => x.Id == id) };
-    setLocation(selected);
-    // enqueueSnackbar(`Location changed to ${selected.Name} `, "info");
-    getFloors(selected).then((x) => {
-      setFloors(x);
-    });
+  const changeOeCode = (code) => {
+    setAllocationData({ ...allocationData, oeCode: code });
   };
 
-  const changeFloor = (floorId) => {
-    var selected = floors.filter((x) => x.Id == floorId);
-    setFloor(selected);
+  const changeStartDate = (dt) => {
+    setAllocationData({ ...allocationData, startDate: dt });
+  };
 
-    getZones().then((x) => {
-      setZones(x);
-    });
+  const changeEndDate = (dt) => {
+    setAllocationData({ ...allocationData, endDate: dt });
+  };
+
+  const add = (desk) => {
+    setAllocations([...allocations, desk]);
+  };
+
+  const remove = (location) => {
+    var index = allocations.findIndex((x) => x.Id == desk.Id);
+    setAllocations([...allocations.splice(index, 1)]);
   };
 
   return (
     <AllocationContext.Provider
       value={{
-        location,
-        locations,
-        allocation,
-        oeCode,
-        changeLocation,
-        floors,
-        floor,
-        changeFloor,
+        allocations,
+        add,
+        remove
       }}
     >
       {children}
