@@ -7,7 +7,7 @@ namespace Spaces.Data.Entities
     {
         public long Id { get; set; }
         public string? Oecode { get; set; }
-        public string? DeskNumber { get; set; }
+        public long? DeskNumber { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
         public string? CreatedBy { get; set; }
