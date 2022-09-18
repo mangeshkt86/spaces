@@ -62,27 +62,20 @@ export function LocationSelector() {
                 className={classes.select}
                 labelId="location-select"
                 id="location"
-                defaultValue={location.location}
+                value={location.location?.Id}
                 size="small"
                 onChange={(e) => location.allocate(e.target.value)}
               >
-                <MenuItem key={0} value={0}>
-                  --Select--
-                </MenuItem>
                 {location.locations?.map((loc) => (
-                  <MenuItem key={loc.Id} value={loc}>
+                  <MenuItem key={loc.Id} value={loc.Id}>
                     {loc.Name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <Box>
-              <FloorSelector
-                location={location.location}
-                allocated={true}
-              />
+            <Box sx={{ display: "flex" }}>
+              {location.location && <FloorSelector />}
             </Box>
-            <FloorSelector />
           </Stack>
         </Grid>
       </Box>

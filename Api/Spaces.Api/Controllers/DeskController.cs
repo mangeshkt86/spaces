@@ -23,7 +23,7 @@ public class DeskController : ODataController
     }
 
     [HttpGet]
-    [EnableQuery(PageSize = 50)]
+    [EnableQuery]
     public IQueryable<TblDesk> Get([FromServices] SpacesDbContext context)
     {
         return context.TblDesks;

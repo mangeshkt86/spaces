@@ -23,7 +23,7 @@ public class DepartmentController : ODataController
     }
 
     [HttpGet]
-    [EnableQuery(PageSize = 50)]
+    [EnableQuery]
     public IQueryable<TblDepartment> Get([FromServices] SpacesDbContext context)
     {
         return context.TblDepartments;

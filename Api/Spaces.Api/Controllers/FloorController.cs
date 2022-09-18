@@ -23,7 +23,7 @@ public class FloorController : ODataController
     }
 
     [HttpGet]
-    [EnableQuery(PageSize = 50)]
+    [EnableQuery]
     public IQueryable<TblFloor> Get([FromServices] SpacesDbContext context)
     {
         return context.TblFloors;

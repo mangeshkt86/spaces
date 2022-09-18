@@ -11,6 +11,7 @@ const AllocationContext = React.createContext({});
 
 export default function AllocationContextProvider({ children }) {
   const [allocations, setAllocations] = useState([]);
+
   const [allocationData, setAllocationData] = useState({
     oeCode: "",
     startDate: new Date(),
@@ -19,6 +20,10 @@ export default function AllocationContextProvider({ children }) {
     allocationId: 0,
   });
 
+  useEffect(() => {
+    console.log(allocations);
+  }, [allocations])
+  
   const changeOeCode = (code) => {
     setAllocationData({ ...allocationData, oeCode: code });
   };
@@ -32,12 +37,12 @@ export default function AllocationContextProvider({ children }) {
   };
 
   const add = (desk) => {
-    setAllocations([...allocations, desk]);
+    setAllocations([...allocations.concat(desk)]);
   };
 
-  const remove = (location) => {
-    var index = allocations.findIndex((x) => x.Id == desk.Id);
-    setAllocations([...allocations.splice(index, 1)]);
+  const remove = (desks) => {
+    var existingAllocations = [...allocations].filter(x => !desks.find(d=> d.Id==x.Id));
+    setAllocations([...existingAllocations]);
   };
 
   return (

@@ -13,7 +13,8 @@ const LocationAllocationContext = React.createContext({});
 export default function LocationAllocationContextProvider({ children }) {
   const [locations, setLocations] = useState([]);
   const [location, setLocation] = useState();
-  const allocations = useContext(AllocationContext)
+  const allocations = useContext(AllocationContext);
+  
   useEffect(() => {
     getLocations().then(setLocations);
   }, []);
@@ -22,29 +23,26 @@ export default function LocationAllocationContextProvider({ children }) {
     if (locations.length) setLocation(locations[0]);
   }, [locations]);
 
-  const allocate = (location) => {
-    setLocation(location);
-    var f = getFloors(location).then(f=>{
-      getZones(f)
-      .then(z=>{
-        getDesks(z)
-        .then(d=>{
+  const allocate = (l) => {
+    var l = locations.find(x=>x.Id==l);
+    setLocation(l);
+    var f = getFloors(l).then((f) => {
+      getZones(f).then((z) => {
+        getDesks(z).then((d) => {
           allocations.add(d);
-        })
-      })
+        });
+      });
     });
   };
 
   const deallocate = (location) => {
     setLocation(null);
-    var f = getFloors(location).then(f=>{
-      getZones(f)
-      .then(z=>{
-        getDesks(z)
-        .then(d=>{
+    var f = getFloors(location).then((f) => {
+      getZones(f).then((z) => {
+        getDesks(z).then((d) => {
           allocations.remove(d);
-        })
-      })
+        });
+      });
     });
   };
 
@@ -54,7 +52,7 @@ export default function LocationAllocationContextProvider({ children }) {
         locations,
         location,
         allocate,
-        deallocate
+        deallocate,
       }}
     >
       {children}

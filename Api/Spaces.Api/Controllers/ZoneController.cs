@@ -22,7 +22,7 @@ public class ZoneController : ODataController
         _context = context;
     }
 
-    [EnableQuery(PageSize = 50)]
+    [EnableQuery]
     public IQueryable<TblZone> Get([FromServices] SpacesDbContext context)
     {
         return context.TblZones;

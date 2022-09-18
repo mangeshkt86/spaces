@@ -23,7 +23,7 @@ public class LocationController : ODataController
     }
 
     [HttpGet]
-    [EnableQuery(PageSize = 50)]
+    [EnableQuery]
     public IQueryable<TblLocation> Get([FromServices] SpacesDbContext context)
     {
         return context.TblLocations;
