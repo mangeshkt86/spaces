@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { withStyles } from '@mui/styles';
+import { withStyles, makeStyles, createStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -19,8 +19,33 @@ import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import DashboardSharpIcon from '@mui/icons-material/DashboardSharp';
 import ExitToAppSharpIcon from '@mui/icons-material/ExitToAppSharp';
+import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
+import CalendarViewMonthSharpIcon from '@mui/icons-material/CalendarViewMonthSharp';
+import { useNavigate, Navigate  } from "react-router-dom";
+
+import { UserContext } from '../contexts/userContext';
+import Booking from '../booking';
+import Allocation from '../allocation';
+import Configuration from '../configuration';
 
 const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    toolbar: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(1),
+    },
+  }),
+);
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -99,8 +124,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const classes = useStyles();
+  const navigate = useNavigate();
+  const user = useContext(UserContext);
   const [open, setOpen] = React.useState(false);
-  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const [selectedMenu, setSelectedMenu] = useState('allocation');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,6 +141,12 @@ export default function MiniDrawer() {
   const handleMenuClick = (key) => {
     console.log(key);
     setSelectedMenu(key);
+  }
+
+  const handleLogoutClick = (key) => {
+    
+    sessionStorage.setItem("loggedInUser", "");
+    navigate('../Login');
   }
 
   return (
@@ -135,6 +169,7 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div">
           Spaces - Allocate your space
           </Typography>
+        {/* <Typography variant='h5'>{user.user.name}</Typography> */}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -145,17 +180,33 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <LightTooltip title="Dashboard" placement="right" arrow>
-            <ListItem button key={"Dashboard"} onClick={(e) => handleMenuClick('dashboard')}>
+          <LightTooltip title="Configuration" placement="right" arrow>
+            <ListItem button key={"Configuration"} onClick={(e) => handleMenuClick('configuration')}>
+              <ListItemIcon><SettingsSharpIcon /></ListItemIcon>
+              <ListItemText primary={"Configuration"} />
+            </ListItem>
+          </LightTooltip>
+        </List>
+        <List>
+          <LightTooltip title="Seat Allocation" placement="right" arrow>
+            <ListItem button key={"Allocation"} onClick={(e) => handleMenuClick('allocation')}>
               <ListItemIcon><DashboardSharpIcon /></ListItemIcon>
-              <ListItemText primary={"Dashboard"} />
+              <ListItemText primary={"Allocation"} />
+            </ListItem>
+          </LightTooltip>
+        </List>
+        <List>
+          <LightTooltip title="Seat Booking" placement="right" arrow>
+            <ListItem button key={"Booking"} onClick={(e) => handleMenuClick('booking')}>
+              <ListItemIcon><CalendarViewMonthSharpIcon /></ListItemIcon>
+              <ListItemText primary={"Booking"} />
             </ListItem>
           </LightTooltip>
         </List>
         <Divider />
         <List>
           <LightTooltip title="Logout" placement="right" arrow>
-            <ListItem button key={"Logout"} onClick={(e) => handleMenuClick('logout')}>
+            <ListItem button key={"Logout"} onClick={(e) => handleLogoutClick('logout')}>
               <ListItemIcon><ExitToAppSharpIcon /></ListItemIcon>
               <ListItemText primary={"Logout"} />
             </ListItem>
@@ -163,20 +214,17 @@ export default function MiniDrawer() {
         </List>
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* <main className={classes.content}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <main className={classes.content}>
           <div className={classes.toolbar} />
-          {
             {
-              'dashboard': <Dashboard />,
-              'allclients': <AllClients />,
-              'newclient': <RegisterClient />,
-              'newmentor': <ProjectMentors />,
-              'invoices': <Invoices />,
-              'managecost': <ManageCost />
-            }[selectedMenu]
-          }
-        </main> */}
+              {
+                'configuration': <Configuration />,
+                'booking': <Booking />,
+                'allocation': <Allocation />
+              }[selectedMenu]
+            }
+          </main>
       </Box>
     </Box>
   );

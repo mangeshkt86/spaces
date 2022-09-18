@@ -1,0 +1,12 @@
+Select * from tbl_location
+Select * from tbl_floor
+Select * from tbl_zone
+Select * from tbl_desk
+Select * from tbl_department
+Select * from tbl_allocation
+Select * from tbl_booking
+
+
+Select * from tbl_desk where Id > 300  AND ID < 351
+Update tbl_desk set ZoneId = 7 where Id > 300  AND ID < 351
+
