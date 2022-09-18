@@ -27,13 +27,11 @@ builder.Services.AddDbContext<SpacesDbContext>(
 
 builder.Services
     .AddControllers()
-    .AddNewtonsoftJson(options =>
-        {
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-        }
-    )
-    .AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand());
-
+    .AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand())
+    .AddJsonOptions(x=> {
+        x.JsonSerializerOptions.ReferenceHandler =ReferenceHandler.IgnoreCycles;
+        x.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
