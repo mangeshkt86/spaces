@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Spaces.Data;
 using Spaces.Data.Entities;
 using System.Linq;
+using System.Net;
 
 namespace Spaces.Api.Controllers;
 
@@ -22,22 +23,44 @@ public class DeskController : ODataController
         _context = context;
     }
 
-    [HttpGet]
+    [HttpGet("get-all-desks")]
     [EnableQuery]
     public IQueryable<TblDesk> Get([FromServices] SpacesDbContext context)
     {
         return context.TblDesks;
     }
 
-    // GET: api/Desk/5
     #region snippet_GetByID
-    [HttpGet]
+    [HttpGet("get-desk-by-Id/{id}")]
     [EnableQuery]
-    public TblDesk GetTblDesk(long key)
+    public async Task<ActionResult<TblDesk>> GetDeskById(long id)
     {
-        var desk = _context.TblDesks.Find(key);
-
+        var desk = await _context.TblDesks.FindAsync(id);
+        if (desk == null)
+        {
+            return NotFound();
+        }
         return desk;
+    }
+
+    [HttpGet("get-desk_details-by-desk-number/{desknumber}")]
+    [EnableQuery]
+    public async Task<ActionResult<TblDesk>> GetDeskByDeskNumber(string desknumber)
+    {
+        desknumber = WebUtility.UrlDecode(desknumber);
+        var desk = await _context.TblDesks.FirstOrDefaultAsync(d => d.DeskNumber == desknumber);
+        if (desk == null)
+        {
+            return NotFound();
+        }
+        return desk;
+    }
+
+    [HttpGet("get-desks-by-zone/{id}")]
+    [EnableQuery]
+    public IQueryable<TblDesk> GetDesksByZoneId(long id)
+    {
+        return _context.TblDesks.Where(desk => desk.ZoneId == id);
     }
     #endregion
 

@@ -24,8 +24,8 @@ public class BookingController : ODataController
     }
 
     #region Booking CRUD Methods
-    [HttpGet]
     [EnableQuery]
+    [HttpGet("get-all-bookings")]
     public IQueryable<TblBooking> Get([FromServices] SpacesDbContext context)
     {
         return context.TblBookings;
@@ -33,7 +33,7 @@ public class BookingController : ODataController
 
     // GET: api/Desk/5
 
-    [HttpGet]
+    [HttpGet("get-booking-by-id/{key}")]
     [EnableQuery]
     public async Task<ActionResult<TblBooking>> GetTblBooking(long key)
     {
@@ -47,7 +47,7 @@ public class BookingController : ODataController
         return location;
     }
 
-    [HttpPost]
+    [HttpPost("add-booking")]
     public async Task<IActionResult> Post([FromBody] TblBooking booking)
     {
         if (!ModelState.IsValid)
@@ -60,7 +60,7 @@ public class BookingController : ODataController
         return Created("api/booking/" + booking.Id, booking);
     }
 
-    [HttpPut]
+    [HttpPut("update-booking")]
     public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] TblBooking booking)
     {
         if (!ModelState.IsValid)
@@ -91,7 +91,7 @@ public class BookingController : ODataController
         return NotFound();
     }
 
-    [HttpDelete]
+    [HttpDelete("delete-booking")]
     public async Task<ActionResult> Delete([FromODataUri] int key)
     {
         var booking = await _context.TblBookings.FindAsync(key);

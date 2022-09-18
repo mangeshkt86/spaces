@@ -4,6 +4,7 @@ import { UserContext } from "../userContext";
 import { getLocations } from "../../apis/locationApi";
 import { getFloor, getFloors, getZones } from "../../apis/floorApi";
 import { getRoles, getUser } from "../../apis/userApi";
+import { getAllAllocations } from "../../apis/allocationApi";
 import { useSnackbar } from "notistack";
 import draftAllocation from "../../config/allocation.json";
 

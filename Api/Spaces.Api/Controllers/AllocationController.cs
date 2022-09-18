@@ -24,8 +24,8 @@ public class AllocationController : ODataController
     }
 
     #region Allocation CRUD Methods
-    [HttpGet]
     [EnableQuery]
+    [HttpGet("get-all-allocations")]
     public IQueryable<TblAllocation> Get([FromServices] SpacesDbContext context)
     {
         return context.TblAllocations;
@@ -33,7 +33,7 @@ public class AllocationController : ODataController
 
     // GET: api/Desk/5
 
-    [HttpGet]
+    [HttpGet("get-allocation-by-id/{key}")]
     [EnableQuery]
     public async Task<ActionResult<TblAllocation>> GetById(long key)
     {
@@ -47,7 +47,7 @@ public class AllocationController : ODataController
         return location;
     }
 
-    [HttpPost]
+    [HttpPost("add-allocation")]
     public async Task<IActionResult> Post([FromBody] TblAllocation allocation)
     {
         if (!ModelState.IsValid)
@@ -60,7 +60,7 @@ public class AllocationController : ODataController
         return Created("api/allocation/" + allocation.Id, allocation);
     }
 
-    [HttpPut]
+    [HttpPut("update-allocation")]
     public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] TblAllocation allocation)
     {
         if (!ModelState.IsValid)
@@ -91,7 +91,7 @@ public class AllocationController : ODataController
         return NotFound();
     }
 
-    [HttpDelete]
+    [HttpDelete("delete-allocation")]
     public async Task<ActionResult> Delete([FromODataUri] int key)
     {
         var allocation = await _context.TblAllocations.FindAsync(key);
@@ -102,6 +102,29 @@ public class AllocationController : ODataController
         _context.TblAllocations.Remove(allocation);
         await _context.SaveChangesAsync();
         return StatusCode((int)HttpStatusCode.NoContent);
+    }
+
+    [HttpGet("get-allocation-summary/{empOECode}")]
+    public IActionResult GetAllocationSummary(string empOECode)
+    {
+        var allocationSummary = (from a in _context.TblAllocations
+                                 join d in _context.TblDesks on a.DeskNumber equals d.Id
+                                 join z in _context.TblZones on d.ZoneId equals z.Id
+                                 join f in _context.TblFloors on z.FloorId equals f.Id
+                                 join l in _context.TblLocations on f.LocationId equals l.Id
+                                 where a.Oecode == empOECode
+                                 select new
+                                 {
+                                     Location = l.Name,
+                                     Floor = f.Name,
+                                     Zone = z.Name,
+                                     OECode = a.Oecode,
+                                     DeskNumber = d.DeskNumber,
+                                     StartDate = a.StartDate,
+                                     EndDate = a.EndDate
+                                 }).ToList();
+
+        return Ok(allocationSummary);
     }
 
 
