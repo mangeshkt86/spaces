@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { withStyles, makeStyles, createStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
@@ -23,6 +23,7 @@ import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import CalendarViewMonthSharpIcon from '@mui/icons-material/CalendarViewMonthSharp';
 import { useNavigate, Navigate  } from "react-router-dom";
 
+import { UserContext } from '../contexts/userContext';
 import Booking from '../booking';
 import Allocation from '../allocation';
 import Configuration from '../configuration';
@@ -125,7 +126,7 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const user = useContext(UserContext);
   const [open, setOpen] = React.useState(false);
   const [selectedMenu, setSelectedMenu] = useState('allocation');
 
@@ -168,6 +169,7 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div">
           Spaces - Allocate your space
           </Typography>
+        {/* <Typography variant='h5'>{user.user.name}</Typography> */}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

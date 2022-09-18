@@ -11,8 +11,6 @@ using System.Linq;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 public class DeskController : ControllerBase
 {
     private readonly SpacesDbContext _context;
@@ -34,17 +32,12 @@ public class DeskController : ControllerBase
     // GET: api/Desk/5
     #region snippet_GetByID
     [HttpGet("{id}")]
-    public async Task<ActionResult<TblDesk>> GetTblDesk(long id)
+    public TblDesk GetTblDesk(long id)
     {
-        var location = await _context.TblDesks.FindAsync(id);
+        var desk = _context.TblDesks.Find(id);
 
-        if (location == null)
-        {
-            return NotFound();
-        }
-
-        return location;
+        return desk;
     }
     #endregion
-    
+
 }

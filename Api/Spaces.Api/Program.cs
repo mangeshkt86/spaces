@@ -5,6 +5,9 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.OData.Extensions;
 using Spaces.Data.Entities;
 using Spaces.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,9 @@ builder.Services.AddDbContext<SpacesDbContext>(
 builder.Services
     .AddControllers()
     .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        {
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        }
     )
     .AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand());
 
@@ -34,7 +39,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
