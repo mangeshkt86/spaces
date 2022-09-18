@@ -12,9 +12,7 @@ using System.Net;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class BookingController : ControllerBase
+public class BookingController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<BookingController> _logger;
@@ -26,7 +24,7 @@ public class BookingController : ControllerBase
     }
 
     #region Booking CRUD Methods
-    [HttpGet]
+    [HttpGet("get-all-bookings")]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblBooking> Get([FromServices] SpacesDbContext context)
     {
@@ -35,10 +33,11 @@ public class BookingController : ControllerBase
 
     // GET: api/Desk/5
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblBooking>> GetTblBooking(long id)
+    [HttpGet("get-booking-by-id/{key}")]
+    [EnableQuery]
+    public async Task<ActionResult<TblBooking>> GetTblBooking(long key)
     {
-        var location = await _context.TblBookings.FindAsync(id);
+        var location = await _context.TblBookings.FindAsync(key);
 
         if (location == null)
         {
@@ -48,7 +47,7 @@ public class BookingController : ControllerBase
         return location;
     }
 
-    [HttpPost]
+    [HttpPost("add-booking")]
     public async Task<IActionResult> Post([FromBody] TblBooking booking)
     {
         if (!ModelState.IsValid)
@@ -61,7 +60,7 @@ public class BookingController : ControllerBase
         return Created("api/booking/" + booking.Id, booking);
     }
 
-    [HttpPut]
+    [HttpPut("update-booking")]
     public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] TblBooking booking)
     {
         if (!ModelState.IsValid)
@@ -92,7 +91,7 @@ public class BookingController : ControllerBase
         return NotFound();
     }
 
-    [HttpDelete]
+    [HttpDelete("delete-booking")]
     public async Task<ActionResult> Delete([FromODataUri] int key)
     {
         var booking = await _context.TblBookings.FindAsync(key);

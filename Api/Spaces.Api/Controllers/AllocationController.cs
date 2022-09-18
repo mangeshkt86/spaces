@@ -12,9 +12,7 @@ using System.Net;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AllocationController : ControllerBase
+public class AllocationController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<AllocationController> _logger;
@@ -26,7 +24,7 @@ public class AllocationController : ControllerBase
     }
 
     #region Allocation CRUD Methods
-    [HttpGet]
+    [HttpGet("get-all-allocations")]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblAllocation> Get([FromServices] SpacesDbContext context)
     {
@@ -35,10 +33,11 @@ public class AllocationController : ControllerBase
 
     // GET: api/Desk/5
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblAllocation>> GetTblAllocation(long id)
+    [HttpGet("get-allocation-by-id/{key}")]
+    [EnableQuery]
+    public async Task<ActionResult<TblAllocation>> GetById(long key)
     {
-        var location = await _context.TblAllocations.FindAsync(id);
+        var location = await _context.TblAllocations.FindAsync(key);
 
         if (location == null)
         {
@@ -48,7 +47,7 @@ public class AllocationController : ControllerBase
         return location;
     }
 
-    [HttpPost]
+    [HttpPost("add-allocation")]
     public async Task<IActionResult> Post([FromBody] TblAllocation allocation)
     {
         if (!ModelState.IsValid)
@@ -61,7 +60,7 @@ public class AllocationController : ControllerBase
         return Created("api/allocation/" + allocation.Id, allocation);
     }
 
-    [HttpPut]
+    [HttpPut("update-allocation")]
     public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] TblAllocation allocation)
     {
         if (!ModelState.IsValid)
@@ -92,7 +91,7 @@ public class AllocationController : ControllerBase
         return NotFound();
     }
 
-    [HttpDelete]
+    [HttpDelete("delete-allocation")]
     public async Task<ActionResult> Delete([FromODataUri] int key)
     {
         var allocation = await _context.TblAllocations.FindAsync(key);

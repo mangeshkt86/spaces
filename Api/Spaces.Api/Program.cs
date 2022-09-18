@@ -27,8 +27,7 @@ builder.Services.AddDbContext<SpacesDbContext>(
 
 builder.Services
     .AddControllers()
-    //.AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand())
-    .AddOData()
+    .AddOData(opt => opt.AddRouteComponents("v1", GetEdmModel()).Filter().Select().Expand())
     .AddJsonOptions(x =>
     {
         x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

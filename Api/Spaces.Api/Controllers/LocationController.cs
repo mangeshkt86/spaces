@@ -11,9 +11,7 @@ using System.Linq;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class LocationController : ControllerBase
+public class LocationController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<LocationController> _logger;
@@ -24,7 +22,7 @@ public class LocationController : ControllerBase
         _context = context;
     }
 
-    [HttpGet(Name = "clients")]
+    [HttpGet]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblLocation> Get([FromServices] SpacesDbContext context)
     {
@@ -33,10 +31,11 @@ public class LocationController : ControllerBase
 
     // GET: api/Location/5
     #region snippet_GetByID
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblLocation>> GetTblLocation(long id)
+    [HttpGet]
+    [EnableQuery]
+    public async Task<ActionResult<TblLocation>> GetTblLocation(long key)
     {
-        var location = await _context.TblLocations.FindAsync(id);
+        var location = await _context.TblLocations.FindAsync(key);
 
         if (location == null)
         {

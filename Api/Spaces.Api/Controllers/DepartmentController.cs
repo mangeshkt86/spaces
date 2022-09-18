@@ -11,9 +11,7 @@ using System.Linq;
 
 namespace Spaces.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class DepartmentController : ControllerBase
+public class DepartmentController : ODataController
 {
     private readonly SpacesDbContext _context;
     private readonly ILogger<DepartmentController> _logger;
@@ -24,7 +22,7 @@ public class DepartmentController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
+    [HttpGet("get-all-departments")]
     [EnableQuery(PageSize = 50)]
     public IQueryable<TblDepartment> Get([FromServices] SpacesDbContext context)
     {
@@ -32,11 +30,12 @@ public class DepartmentController : ControllerBase
     }
 
     // GET: api/Desk/5
-    #region snippet_GetByID
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TblDepartment>> GetTblDepartment(long id)
+    #region Department Public Methods
+    [HttpGet("get-department-by-id/{key}")]
+    [EnableQuery]
+    public async Task<ActionResult<TblDepartment>> GetTblDepartment(long key)
     {
-        var location = await _context.TblDepartments.FindAsync(id);
+        var location = await _context.TblDepartments.FindAsync(key);
 
         if (location == null)
         {
@@ -46,5 +45,4 @@ public class DepartmentController : ControllerBase
         return location;
     }
     #endregion
-    
 }
