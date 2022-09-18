@@ -40,8 +40,29 @@ export default function Allocation() {
                                             size="small"
                                             onChange={(e) => allocation.changeLocation(e.target.value)}
                                         >
+                                            <MenuItem key={0} value={0}>--Select--</MenuItem>
                                             {
                                                 allocation.locations.map(loc => ( <MenuItem key={loc.Id} value={loc.Id}>{loc.Name}</MenuItem> ))
+                                            }
+                                        </Select>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={1} alignItems="flex-end">
+                                <Grid item>
+                                    Floor :
+                                </Grid>
+                                <Grid item>
+                                        <Select
+                                            className={classes.select}
+                                            labelId="floor-select"
+                                            id="floor"
+                                            value={allocation.floor}
+                                            size="small"
+                                            onChange={(e) => allocation.changeFloor(e.target.value)}
+                                        >
+                                            <MenuItem key={0} value={0}>--Select--</MenuItem>
+                                            {
+                                                allocation.floors.map(floor => ( <MenuItem key={floor.Id} value={floor.Id}>{floor.Name}</MenuItem> ))
                                             }
                                         </Select>
                                 </Grid>
